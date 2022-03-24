@@ -18,7 +18,7 @@ public class Decoder implements Action {
             char[] buffer = new char[65536];
             while (reader.ready()) {
                 int real = reader.read(buffer);
-                char[] bufferNew = encodeBuffer(buffer,parameters[2]);
+                char[] bufferNew = decodeBuffer(buffer,parameters[2]);
                 writer.write(bufferNew, 0, real);
             }
         } catch (IOException e) {
@@ -27,19 +27,19 @@ public class Decoder implements Action {
         return new Result("decode all right",ResultCode.OK);
     }
 
-    public char[] encodeBuffer(char[] buffer, String keyInString) {
+    public char[] decodeBuffer(char[] buffer, String keyInString) {
         int key = 147-Integer.parseInt(keyInString);
         char[] alphabet = Constants.ALPHABET.toCharArray();
-        char[] bufferEncode = new char[65536];
+        char[] bufferDecode = new char[65536];
         for (int i = 0; i < buffer.length; i++) {
             for (int j = 0; j < alphabet.length; j++) {
                 if (buffer[i] == alphabet[j]) {
-                    bufferEncode[i] = alphabet[(j + key) % 147];
+                    bufferDecode[i] = alphabet[(j + key) % 147];
                     break;
                 }
             }
         }
-        return bufferEncode;
+        return bufferDecode;
     }
 
 }
